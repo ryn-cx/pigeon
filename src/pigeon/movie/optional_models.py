@@ -187,6 +187,8 @@ class Availability(BaseModel):
 class Markers(BaseModel):
     model_config = ConfigDict(extra="ignore", defer_build=True)
     socr: int | Any = Field(None, alias="SOCR", union_mode="left_to_right")
+    solc: int | Any = Field(None, alias="SOLC", union_mode="left_to_right")
+    eolc: int | Any = Field(None, alias="EOLC", union_mode="left_to_right")
 
 
 class Hd(BaseModel):
@@ -551,13 +553,6 @@ class Availability1(BaseModel):
     )
 
 
-class Markers1(BaseModel):
-    model_config = ConfigDict(extra="ignore", defer_build=True)
-    socr: int | Any = Field(None, alias="SOCR", union_mode="left_to_right")
-    solc: int | Any = Field(None, alias="SOLC", union_mode="left_to_right")
-    eolc: int | Any = Field(None, alias="EOLC", union_mode="left_to_right")
-
-
 class Hd1(BaseModel):
     model_config = ConfigDict(extra="ignore", defer_build=True)
     audio_tracks: AudioTracks | Any = Field(
@@ -572,7 +567,7 @@ class Hd1(BaseModel):
     start_of_credits: int | Any = Field(
         None, alias="startOfCredits", union_mode="left_to_right"
     )
-    markers: Markers1 | Any = Field(default=None, union_mode="left_to_right")
+    markers: Markers | Any = Field(default=None, union_mode="left_to_right")
 
 
 class Formats1(BaseModel):
@@ -1019,6 +1014,7 @@ class Attributes2(BaseModel):
     privacy_restrictions: list[str] | Any = Field(
         None, alias="privacyRestrictions", union_mode="left_to_right"
     )
+    subtitled: bool | Any = Field(default=None, union_mode="left_to_right")
 
 
 class Datum1(BaseModel):
