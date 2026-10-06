@@ -35,12 +35,12 @@ class Clips(BaseModel):
     node_types: list[str] = Field(..., alias='nodeTypes')
     count: int
 
-class Items(BaseModel):
+class LinkedAssets(BaseModel):
     model_config = ConfigDict(defer_build=True)
     node_types: list[str] = Field(..., alias='nodeTypes')
     count: int
 
-class Latest(BaseModel):
+class Items(BaseModel):
     model_config = ConfigDict(defer_build=True)
     node_types: list[str] = Field(..., alias='nodeTypes')
     count: int
@@ -55,7 +55,7 @@ class Collections(BaseModel):
     node_types: list[str] = Field(..., alias='nodeTypes')
     count: int
 
-class LinkedAssets(BaseModel):
+class Latest(BaseModel):
     model_config = ConfigDict(defer_build=True)
     node_types: list[str] = Field(..., alias='nodeTypes')
     count: int
@@ -67,11 +67,11 @@ class ChildTypes(BaseModel):
     shortforms: Shortforms
     free_episodes: FreeEpisodes
     clips: Clips
+    linked_assets: LinkedAssets | None = None
     items: Items
-    latest: Latest | None = None
     trailers: Trailers | None = None
     collections: Collections | None = None
-    linked_assets: LinkedAssets | None = None
+    latest: Latest | None = None
 
 class AudienceLevelItem(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -108,10 +108,10 @@ class LogoItem(BaseModel):
 
 class Channel(BaseModel):
     model_config = ConfigDict(defer_build=True)
-    logo_style: str | None = Field(None, alias='logoStyle')
     access_channel: str = Field(..., alias='accessChannel')
-    provider_id: str | None = Field(None, alias='providerId')
     name: str
+    logo_style: str | None = Field(None, alias='logoStyle')
+    provider_id: str | None = Field(None, alias='providerId')
     logo: list[LogoItem] | None = None
     sections: list[str] | None = None
     logo_height_percentage: int | None = Field(None, alias='logoHeightPercentage')
@@ -246,13 +246,13 @@ class Attributes(BaseModel):
     smart_call_to_action: str = Field(..., alias='smartCallToAction')
     sort_title: str = Field(..., alias='sortTitle')
     synopsis_long: str = Field(..., alias='synopsisLong')
-    synopsis_short: str | None = Field(None, alias='synopsisShort')
     target_audience: TargetAudience = Field(..., alias='targetAudience')
     title: str
     title_medium: str = Field(..., alias='titleMedium')
-    title_medium_seo: str | None = Field(None, alias='titleMediumSeo')
     title_seo: str = Field(..., alias='titleSeo')
     synopsis: str | None = None
+    synopsis_short: str | None = Field(None, alias='synopsisShort')
+    title_medium_seo: str | None = Field(None, alias='titleMediumSeo')
 
 class FreeEpisodes1(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -276,12 +276,12 @@ class ChildTypes1(BaseModel):
     shortforms: Shortforms | None = None
     free_episodes: FreeEpisodes1 | None = None
     clips: Clips | None = None
-    next_clips: NextClips | None = None
-    next_shortforms: NextShortforms | None = None
     items: Items | None = None
     latest: Latest | None = None
     trailers: Trailers | None = None
     collections: Collections | None = None
+    next_clips: NextClips | None = None
+    next_shortforms: NextShortforms | None = None
     linked_assets: LinkedAssets | None = None
 
 class TuneInBadging1(BaseModel):
@@ -325,14 +325,14 @@ class DeviceAvailability3(BaseModel):
 class FanCriticRatingItem1(BaseModel):
     model_config = ConfigDict(defer_build=True)
     source: str
-    fan_score: int | None = Field(None, alias='fanScore')
     critic_score: int | None = Field(None, alias='criticScore')
+    fan_score: int | None = Field(None, alias='fanScore')
     tags: list[str] | None = None
 
 class AudioTracks1(BaseModel):
     model_config = ConfigDict(defer_build=True)
-    spa: list[str] | None = None
     eng: list[str]
+    spa: list[str] | None = None
 
 class Availability1(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -372,17 +372,17 @@ class Formats1(BaseModel):
     model_config = ConfigDict(defer_build=True)
     hd: Hd1 = Field(..., alias='HD')
 
+class Fact(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    fact_icon: str = Field(..., alias='factIcon')
+    fact_text: str = Field(..., alias='factText')
+
 class AlternativeDateItem(BaseModel):
     model_config = ConfigDict(defer_build=True)
     type: str
     value: date
     date_type: str = Field(..., alias='dateType')
     territory: str
-
-class Fact(BaseModel):
-    model_config = ConfigDict(defer_build=True)
-    fact_icon: str = Field(..., alias='factIcon')
-    fact_text: str = Field(..., alias='factText')
 
 class Attributes1(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -430,9 +430,10 @@ class Attributes1(BaseModel):
     target_audience: TargetAudience = Field(..., alias='targetAudience')
     title: str
     title_medium: str = Field(..., alias='titleMedium')
-    title_medium_seo: str | None = Field(None, alias='titleMediumSeo')
     title_seo: str = Field(..., alias='titleSeo')
     synopsis: str | None = None
+    facts: list[Fact] | None = None
+    title_medium_seo: str | None = Field(None, alias='titleMediumSeo')
     director: list[str] | None = None
     alternative_date: list[AlternativeDateItem] | None = Field(None, alias='alternativeDate')
     closed_captioned: bool | None = Field(None, alias='closedCaptioned')
@@ -455,7 +456,6 @@ class Attributes1(BaseModel):
     title_long: str | None = Field(None, alias='titleLong')
     year: int | None = None
     desc_short_seo: str | None = Field(None, alias='descShortSeo')
-    facts: list[Fact] | None = None
 
 class Datum(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -481,10 +481,10 @@ class Badging2(BaseModel):
 
 class Channel2(BaseModel):
     model_config = ConfigDict(defer_build=True)
-    logo_style: str | None = Field(None, alias='logoStyle')
     access_channel: str = Field(..., alias='accessChannel')
-    provider_id: str | None = Field(None, alias='providerId')
     name: str
+    logo_style: str | None = Field(None, alias='logoStyle')
+    provider_id: str | None = Field(None, alias='providerId')
     logo: list[LogoItem] | None = None
     sections: list[str] | None = None
     logo_height_percentage: int | None = Field(None, alias='logoHeightPercentage')
@@ -581,14 +581,25 @@ class Attributes2(BaseModel):
     synopsis_long: str | None = Field(None, alias='synopsisLong')
     title: str
     title_medium: str = Field(..., alias='titleMedium')
-    title_medium_seo: str | None = Field(None, alias='titleMediumSeo')
     title_seo: str = Field(..., alias='titleSeo')
     genre_details: list[GenreDetail] | None = Field(None, alias='genreDetails')
     synopsis_short: str | None = Field(None, alias='synopsisShort')
+    title_medium_seo: str | None = Field(None, alias='titleMediumSeo')
 
 class ChildTypes3(BaseModel):
     model_config = ConfigDict(defer_build=True)
     images: Images
+
+class Term(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    description: str
+    abbreviation: str | None = None
+
+class AdvisoryItem(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    terms: list[Term]
+    id: str
+    group: int
 
 class Badging3(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -597,10 +608,10 @@ class Badging3(BaseModel):
 
 class Channel3(BaseModel):
     model_config = ConfigDict(defer_build=True)
-    logo_style: str | None = Field(None, alias='logoStyle')
     access_channel: str = Field(..., alias='accessChannel')
-    provider_id: str | None = Field(None, alias='providerId')
     name: str
+    logo_style: str | None = Field(None, alias='logoStyle')
+    provider_id: str | None = Field(None, alias='providerId')
     logo: list[LogoItem] | None = None
     sections: list[str] | None = None
     logo_height_percentage: int | None = Field(None, alias='logoHeightPercentage')
@@ -671,23 +682,12 @@ class Formats3(BaseModel):
     model_config = ConfigDict(defer_build=True)
     hd: Hd3 = Field(..., alias='HD')
 
-class Term(BaseModel):
-    model_config = ConfigDict(defer_build=True)
-    description: str
-    abbreviation: str | None = None
-
-class AdvisoryItem(BaseModel):
-    model_config = ConfigDict(defer_build=True)
-    terms: list[Term]
-    id: str
-    group: int
-
 class Attributes3(BaseModel):
     model_config = ConfigDict(defer_build=True)
     free_wheel_content_id: str = Field(..., alias='FreeWheelContentID')
+    advisory: list[AdvisoryItem] | None = None
     audio_described: bool = Field(..., alias='audioDescribed')
     badging: Badging3
-    cast: list[str] | None = None
     channel: Channel3
     chapters_enabled: bool = Field(..., alias='chaptersEnabled')
     child_node_types: list[str] = Field(..., alias='childNodeTypes')
@@ -702,7 +702,6 @@ class Attributes3(BaseModel):
     duration_milliseconds: int = Field(..., alias='durationMilliseconds')
     duration_minutes: int = Field(..., alias='durationMinutes')
     duration_seconds: int = Field(..., alias='durationSeconds')
-    editorial_warning_text: str | None = Field(None, alias='editorialWarningText')
     episode_name: str = Field(..., alias='episodeName')
     episode_name_long: str = Field(..., alias='episodeNameLong')
     episode_number: int = Field(..., alias='episodeNumber')
@@ -714,7 +713,6 @@ class Attributes3(BaseModel):
     images: list[Image]
     last_in_season: bool = Field(..., alias='lastInSeason')
     main_original_language: str = Field(..., alias='mainOriginalLanguage')
-    merlin_alternate_id: str | None = Field(None, alias='merlinAlternateId')
     merlin_id: str = Field(..., alias='merlinId')
     merlin_series_id: str = Field(..., alias='merlinSeriesId')
     nbcu_id: str = Field(..., alias='nbcuId')
@@ -746,8 +744,10 @@ class Attributes3(BaseModel):
     title_medium: str = Field(..., alias='titleMedium')
     title_seo: str = Field(..., alias='titleSeo')
     year: int
+    cast: list[str] | None = None
+    editorial_warning_text: str | None = Field(None, alias='editorialWarningText')
     genre_details: list[GenreDetail] | None = Field(None, alias='genreDetails')
-    advisory: list[AdvisoryItem] | None = None
+    merlin_alternate_id: str | None = Field(None, alias='merlinAlternateId')
 
 class Datum2(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -781,6 +781,17 @@ class Items2(BaseModel):
 class ChildTypes4(BaseModel):
     model_config = ConfigDict(defer_build=True)
     images: Images
+
+class Term1(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    description: str
+    abbreviation: str
+
+class AdvisoryItem1(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    terms: list[Term1]
+    id: str
+    group: int
 
 class Badging4(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -860,20 +871,10 @@ class MainTitleInfoItem(BaseModel):
     linked_episodes: list[LinkedEpisode] = Field(..., alias='linkedEpisodes')
     content_segments: list[str] = Field(..., alias='contentSegments')
 
-class Term1(BaseModel):
-    model_config = ConfigDict(defer_build=True)
-    description: str
-    abbreviation: str
-
-class AdvisoryItem1(BaseModel):
-    model_config = ConfigDict(defer_build=True)
-    terms: list[Term1]
-    id: str
-    group: int
-
 class Attributes4(BaseModel):
     model_config = ConfigDict(defer_build=True)
     free_wheel_content_id: str = Field(..., alias='FreeWheelContentID')
+    advisory: list[AdvisoryItem1] | None = None
     audio_described: bool = Field(..., alias='audioDescribed')
     autoplay: bool
     badging: Badging4
@@ -910,7 +911,6 @@ class Attributes4(BaseModel):
     title: str
     title_long: str = Field(..., alias='titleLong')
     title_medium: str = Field(..., alias='titleMedium')
-    advisory: list[AdvisoryItem1] | None = None
 
 class Datum3(BaseModel):
     model_config = ConfigDict(defer_build=True)
