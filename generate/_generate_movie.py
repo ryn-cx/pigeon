@@ -6,8 +6,8 @@ import logging
 from get_around import build_client_automatically
 from good_ass_pydantic_integrator.recordings import (
     RecordingId,
-    download_named_missing,
-    load_named_ids,
+    download_missing,
+    load_ids,
     rebuild_model,
 )
 
@@ -26,12 +26,12 @@ class MovieId(RecordingId[Pigeon]):
         return client.movie.download(self.movie_id)
 
 
-MOVIES = load_named_ids(GENERATOR_PATHS, MODEL_NAME, MovieId)
+MOVIES = load_ids(GENERATOR_PATHS, MODEL_NAME, MovieId)
 
 
 # TODO: Validate
 def generate_movie(client: Pigeon) -> None:
-    download_named_missing(GENERATOR_PATHS, MODEL_NAME, MOVIES, client)
+    download_missing(GENERATOR_PATHS, MODEL_NAME, MOVIES, client)
     rebuild_model(GENERATOR_PATHS, MODEL_NAME, MovieId)
 
 

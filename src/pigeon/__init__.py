@@ -20,8 +20,7 @@ logger.addHandler(NullHandler())
 
 API_URL = "https://atom.peacocktv.com/adapter-calypso/v3/query/node"
 
-CONTENT_SEGMENTS = "APPLETV,D2C,ESSENTIALS,Free"
-"""The content segments peacocktv.com asks for when no one is signed in."""
+CONTENT_SEGMENTS = "APPLETV,D2C,ESSENTIALS,Free,STARZ"
 
 
 # TODO: Validate

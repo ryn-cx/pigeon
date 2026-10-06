@@ -1,17 +1,9 @@
-{
-  "movies-a-z-page-2": [
+[
+  [
     "/movies/a-z",
     100,
     100
   ],
-  "tv-popular-on-peacock": [
-    "/tv/iceberg-tv-popular-on-peacock",
-    null,
-    null
-  ],
-  "tv-comedy": [
-    "/tv/comedy",
-    null,
-    null
-  ]
-}
+  "/tv/iceberg-tv-popular-on-peacock",
+  "/tv/comedy"
+]
