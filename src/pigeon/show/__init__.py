@@ -70,6 +70,7 @@ class Show(BaseEndpoint):
         if (
             show.get("type") != SHOW_TYPE
             or show.get("attributes", {}).get("providerSeriesId") != series_id
+            or "items" not in show.get("relationships", {})
         ):
             raise ShowNotFoundError(series_id, HTTPStatus.OK, response)
         return response
