@@ -26,7 +26,7 @@ class Shortforms(BaseModel):
 
 class FreeEpisodes(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
-    node_types: list[Any] | Any = Field(None, alias='nodeTypes', union_mode='left_to_right')
+    node_types: list[str] | Any = Field(None, alias='nodeTypes', union_mode='left_to_right')
     count: int | Any = Field(default=None, union_mode='left_to_right')
 
 class Clips(BaseModel):
@@ -252,11 +252,7 @@ class Attributes(BaseModel):
     synopsis: str | Any = Field(default=None, union_mode='left_to_right')
     synopsis_short: str | Any = Field(None, alias='synopsisShort', union_mode='left_to_right')
     title_medium_seo: str | Any = Field(None, alias='titleMediumSeo', union_mode='left_to_right')
-
-class FreeEpisodes1(BaseModel):
-    model_config = ConfigDict(extra='ignore', defer_build=True)
-    node_types: list[str] | Any = Field(None, alias='nodeTypes', union_mode='left_to_right')
-    count: int | Any = Field(default=None, union_mode='left_to_right')
+    director: list[str] | Any = Field(default=None, union_mode='left_to_right')
 
 class NextClips(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
@@ -273,7 +269,7 @@ class ChildTypes1(BaseModel):
     images: Images | Any = Field(default=None, union_mode='left_to_right')
     first_ep: FirstEp | Any = Field(default=None, union_mode='left_to_right')
     shortforms: Shortforms | Any = Field(default=None, union_mode='left_to_right')
-    free_episodes: FreeEpisodes1 | Any = Field(default=None, union_mode='left_to_right')
+    free_episodes: FreeEpisodes | Any = Field(default=None, union_mode='left_to_right')
     clips: Clips | Any = Field(default=None, union_mode='left_to_right')
     items: Items | Any = Field(default=None, union_mode='left_to_right')
     latest: Latest | Any = Field(default=None, union_mode='left_to_right')
@@ -356,6 +352,9 @@ class Markers(BaseModel):
     socr: int | Any = Field(None, alias='SOCR', union_mode='left_to_right')
     solc: int | Any = Field(None, alias='SOLC', union_mode='left_to_right')
     eolc: int | Any = Field(None, alias='EOLC', union_mode='left_to_right')
+    soi: int | Any = Field(None, alias='SOI', union_mode='left_to_right')
+    hsi: int | Any = Field(None, alias='HSI', union_mode='left_to_right')
+    spi: int | Any = Field(None, alias='SPI', union_mode='left_to_right')
 
 class Hd1(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
@@ -382,6 +381,17 @@ class AlternativeDateItem(BaseModel):
     value: date | Any = Field(default=None, union_mode='left_to_right')
     date_type: str | Any = Field(None, alias='dateType', union_mode='left_to_right')
     territory: str | Any = Field(default=None, union_mode='left_to_right')
+
+class Term(BaseModel):
+    model_config = ConfigDict(extra='ignore', defer_build=True)
+    description: str | Any = Field(default=None, union_mode='left_to_right')
+    abbreviation: str | Any = Field(default=None, union_mode='left_to_right')
+
+class AdvisoryItem(BaseModel):
+    model_config = ConfigDict(extra='ignore', defer_build=True)
+    terms: list[Term] | Any = Field(default=None, union_mode='left_to_right')
+    id: str | Any = Field(default=None, union_mode='left_to_right')
+    group: int | Any = Field(default=None, union_mode='left_to_right')
 
 class Attributes1(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
@@ -455,6 +465,10 @@ class Attributes1(BaseModel):
     title_long: str | Any = Field(None, alias='titleLong', union_mode='left_to_right')
     year: int | Any = Field(default=None, union_mode='left_to_right')
     desc_short_seo: str | Any = Field(None, alias='descShortSeo', union_mode='left_to_right')
+    editorial_warning_text: str | Any = Field(None, alias='editorialWarningText', union_mode='left_to_right')
+    merlin_alternate_id: str | Any = Field(None, alias='merlinAlternateId', union_mode='left_to_right')
+    uriid: str | Any = Field(default=None, union_mode='left_to_right')
+    advisory: list[AdvisoryItem] | Any = Field(default=None, union_mode='left_to_right')
 
 class Datum(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
@@ -589,12 +603,7 @@ class ChildTypes3(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
     images: Images | Any = Field(default=None, union_mode='left_to_right')
 
-class Term(BaseModel):
-    model_config = ConfigDict(extra='ignore', defer_build=True)
-    description: str | Any = Field(default=None, union_mode='left_to_right')
-    abbreviation: str | Any = Field(default=None, union_mode='left_to_right')
-
-class AdvisoryItem(BaseModel):
+class AdvisoryItem1(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
     terms: list[Term] | Any = Field(default=None, union_mode='left_to_right')
     id: str | Any = Field(default=None, union_mode='left_to_right')
@@ -679,7 +688,7 @@ class Formats3(BaseModel):
 class Attributes3(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
     free_wheel_content_id: str | Any = Field(None, alias='FreeWheelContentID', union_mode='left_to_right')
-    advisory: list[AdvisoryItem] | Any = Field(default=None, union_mode='left_to_right')
+    advisory: list[AdvisoryItem1] | Any = Field(default=None, union_mode='left_to_right')
     audio_described: bool | Any = Field(None, alias='audioDescribed', union_mode='left_to_right')
     badging: Badging3 | Any = Field(default=None, union_mode='left_to_right')
     channel: Channel3 | Any = Field(default=None, union_mode='left_to_right')
@@ -742,6 +751,8 @@ class Attributes3(BaseModel):
     editorial_warning_text: str | Any = Field(None, alias='editorialWarningText', union_mode='left_to_right')
     genre_details: list[GenreDetail] | Any = Field(None, alias='genreDetails', union_mode='left_to_right')
     merlin_alternate_id: str | Any = Field(None, alias='merlinAlternateId', union_mode='left_to_right')
+    director: list[str] | Any = Field(default=None, union_mode='left_to_right')
+    producer: list[str] | Any = Field(default=None, union_mode='left_to_right')
 
 class Datum2(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
@@ -776,7 +787,7 @@ class ChildTypes4(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
     images: Images | Any = Field(default=None, union_mode='left_to_right')
 
-class AdvisoryItem1(BaseModel):
+class AdvisoryItem2(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
     terms: list[Term] | Any = Field(default=None, union_mode='left_to_right')
     id: str | Any = Field(default=None, union_mode='left_to_right')
@@ -863,7 +874,7 @@ class MainTitleInfoItem(BaseModel):
 class Attributes4(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
     free_wheel_content_id: str | Any = Field(None, alias='FreeWheelContentID', union_mode='left_to_right')
-    advisory: list[AdvisoryItem1] | Any = Field(default=None, union_mode='left_to_right')
+    advisory: list[AdvisoryItem2] | Any = Field(default=None, union_mode='left_to_right')
     audio_described: bool | Any = Field(None, alias='audioDescribed', union_mode='left_to_right')
     autoplay: bool | Any = Field(default=None, union_mode='left_to_right')
     badging: Badging4 | Any = Field(default=None, union_mode='left_to_right')
@@ -1066,7 +1077,7 @@ class Formats5(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
     hd: Hd5 | Any = Field(None, alias='HD', union_mode='left_to_right')
 
-class AdvisoryItem2(BaseModel):
+class AdvisoryItem3(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)
     terms: list[Term] | Any = Field(default=None, union_mode='left_to_right')
     id: str | Any = Field(default=None, union_mode='left_to_right')
@@ -1151,7 +1162,7 @@ class Attributes7(BaseModel):
     synopsis_brief: str | Any = Field(None, alias='synopsisBrief', union_mode='left_to_right')
     title_seo: str | Any = Field(None, alias='titleSeo', union_mode='left_to_right')
     year: int | Any = Field(default=None, union_mode='left_to_right')
-    advisory: list[AdvisoryItem2] | Any = Field(default=None, union_mode='left_to_right')
+    advisory: list[AdvisoryItem3] | Any = Field(default=None, union_mode='left_to_right')
 
 class ChildTypes8(BaseModel):
     model_config = ConfigDict(extra='ignore', defer_build=True)

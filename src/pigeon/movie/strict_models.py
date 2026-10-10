@@ -38,8 +38,8 @@ class LinkedAssets(BaseModel):
 class ChildTypes(BaseModel):
     model_config = ConfigDict(defer_build=True)
     images: Images
-    shortforms: Shortforms
-    trailers: Trailers
+    shortforms: Shortforms | None = None
+    trailers: Trailers | None = None
     clips: Clips | None = None
     linked_assets: LinkedAssets | None = None
 
@@ -62,8 +62,8 @@ class Badging(BaseModel):
 
 class Channel(BaseModel):
     model_config = ConfigDict(defer_build=True)
-    access_channel: str = Field(..., alias='accessChannel')
-    name: str
+    access_channel: str | None = Field(None, alias='accessChannel')
+    name: str | None = None
 
 class DeviceAvailability(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -152,6 +152,17 @@ class TargetAudience(BaseModel):
     model_config = ConfigDict(defer_build=True)
     id: str
 
+class Term(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    description: str
+    abbreviation: str
+
+class AdvisoryItem(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    terms: list[Term]
+    id: str
+    group: int
+
 class AlternativeDateItem(BaseModel):
     model_config = ConfigDict(defer_build=True)
     type: str
@@ -178,23 +189,21 @@ class Attributes(BaseModel):
     audience_level: list[AudienceLevelItem] | None = Field(None, alias='audienceLevel')
     audio_described: bool = Field(..., alias='audioDescribed')
     badging: Badging
-    cast: list[str]
     channel: Channel
     chapters_enabled: bool = Field(..., alias='chaptersEnabled')
     child_node_types: list[str] = Field(..., alias='childNodeTypes')
     classification: list[str]
     closed_captioned: bool = Field(..., alias='closedCaptioned')
-    collection_pdp: str = Field(..., alias='collectionPdp')
+    collection_pdp: str | None = Field(None, alias='collectionPdp')
     content_segments: list[str] = Field(..., alias='contentSegments')
     created_date: int = Field(..., alias='createdDate')
     desc_long_seo: str = Field(..., alias='descLongSeo')
     device_availabilities: list[DeviceAvailability] | None = Field(None, alias='deviceAvailabilities')
     device_availability: DeviceAvailability1 = Field(..., alias='deviceAvailability')
-    director: list[str]
+    director: list[str] | None = None
     duration_milliseconds: int = Field(..., alias='durationMilliseconds')
     duration_minutes: int = Field(..., alias='durationMinutes')
     duration_seconds: int = Field(..., alias='durationSeconds')
-    editorial_warning_text: str | None = Field(None, alias='editorialWarningText')
     formats: Formats
     genre_details: list[GenreDetail] | None = Field(None, alias='genreDetails')
     genre_list: list[GenreListItem] = Field(..., alias='genreList')
@@ -202,7 +211,6 @@ class Attributes(BaseModel):
     gracenote_id: str = Field(..., alias='gracenoteId')
     images: list[Image]
     main_original_language: str = Field(..., alias='mainOriginalLanguage')
-    merlin_alternate_id: str | None = Field(None, alias='merlinAlternateId')
     merlin_id: str = Field(..., alias='merlinId')
     native_id: str = Field(..., alias='nativeId')
     nbcu_id: str = Field(..., alias='nbcuId')
@@ -226,8 +234,12 @@ class Attributes(BaseModel):
     title_medium: str = Field(..., alias='titleMedium')
     title_seo: str = Field(..., alias='titleSeo')
     year: int
-    alternative_date: list[AlternativeDateItem] | None = Field(None, alias='alternativeDate')
+    advisory: list[AdvisoryItem] | None = None
     cwm: str | None = None
+    editorial_warning_text: str | None = Field(None, alias='editorialWarningText')
+    cast: list[str] | None = None
+    merlin_alternate_id: str | None = Field(None, alias='merlinAlternateId')
+    alternative_date: list[AlternativeDateItem] | None = Field(None, alias='alternativeDate')
     fan_critic_rating: list[FanCriticRatingItem] | None = Field(None, alias='fanCriticRating')
     is_kids_content: bool | None = Field(None, alias='isKidsContent')
     placement_tags: list[PlacementTag] | None = Field(None, alias='placementTags')
@@ -242,7 +254,7 @@ class FirstEp(BaseModel):
 
 class FreeEpisodes(BaseModel):
     model_config = ConfigDict(defer_build=True)
-    node_types: list[None] = Field(..., alias='nodeTypes')
+    node_types: list[str] = Field(..., alias='nodeTypes')
     count: int
 
 class Items(BaseModel):
@@ -258,30 +270,35 @@ class Collections(BaseModel):
 class ChildTypes1(BaseModel):
     model_config = ConfigDict(defer_build=True)
     images: Images
-    shortforms: Shortforms | None = None
-    trailers: Trailers | None = None
     first_ep: FirstEp | None = None
+    shortforms: Shortforms | None = None
     free_episodes: FreeEpisodes | None = None
     items: Items | None = None
+    trailers: Trailers | None = None
     clips: Clips | None = None
     linked_assets: LinkedAssets | None = None
     collections: Collections | None = None
-
-class Term(BaseModel):
-    model_config = ConfigDict(defer_build=True)
-    description: str
-    abbreviation: str | None = None
-
-class AdvisoryItem(BaseModel):
-    model_config = ConfigDict(defer_build=True)
-    terms: list[Term]
-    id: str
-    group: int
 
 class Badging1(BaseModel):
     model_config = ConfigDict(defer_build=True)
     video_formats: list[VideoFormat] = Field(..., alias='videoFormats')
     audio_tracks: list[str] = Field(..., alias='audioTracks')
+
+class LogoItem(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    type: str
+    key: str
+    template: str
+
+class Channel1(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    access_channel: str | None = Field(None, alias='accessChannel')
+    name: str | None = None
+    logo_style: str | None = Field(None, alias='logoStyle')
+    provider_id: str | None = Field(None, alias='providerId')
+    logo: list[LogoItem] | None = None
+    sections: list[str] | None = None
+    logo_height_percentage: int | None = Field(None, alias='logoHeightPercentage')
 
 class DeviceAvailability2(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -290,12 +307,12 @@ class DeviceAvailability2(BaseModel):
     offer_stage: str = Field(..., alias='offerStage')
     offer_start_ts: int = Field(..., alias='offerStartTs')
     offer_end_ts: int = Field(..., alias='offerEndTs')
-    streamable: bool | None = None
-    downloadable: bool | None = None
     content_segment: str = Field(..., alias='contentSegment')
     video_format: str = Field(..., alias='videoFormat')
     video_format_variant: str = Field(..., alias='videoFormatVariant')
     colour_space: str = Field(..., alias='colourSpace')
+    streamable: bool | None = None
+    downloadable: bool | None = None
 
 class DeviceAvailability3(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -316,8 +333,6 @@ class Availability1(BaseModel):
     offer_stage: str = Field(..., alias='offerStage')
     offer_start_ts: int = Field(..., alias='offerStartTs')
     offer_end_ts: int = Field(..., alias='offerEndTs')
-    streamable: bool | None = None
-    downloadable: bool | None = None
     available_devices: list[AvailableDevice] = Field(..., alias='availableDevices')
     extended_offer_start_ts: int = Field(..., alias='extendedOfferStartTs')
     extended_offer_end_ts: int = Field(..., alias='extendedOfferEndTs')
@@ -325,18 +340,29 @@ class Availability1(BaseModel):
     video_format: str = Field(..., alias='videoFormat')
     video_format_variant: str = Field(..., alias='videoFormatVariant')
     colour_space: str = Field(..., alias='colourSpace')
+    streamable: bool | None = None
+    downloadable: bool | None = None
     free_offer_end_ts: int | None = Field(None, alias='freeOfferEndTs')
     restrictions: list[Restriction] | None = None
+
+class Markers1(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    socr: int = Field(..., alias='SOCR')
+    soi: int | None = Field(None, alias='SOI')
+    hsi: int | None = Field(None, alias='HSI')
+    spi: int | None = Field(None, alias='SPI')
+    solc: int | None = Field(None, alias='SOLC')
+    eolc: int | None = Field(None, alias='EOLC')
 
 class Hd1(BaseModel):
     model_config = ConfigDict(defer_build=True)
     audio_tracks: AudioTracks = Field(..., alias='audioTracks')
     chapter_markers: list[None] = Field(..., alias='chapterMarkers')
     event_stage: str = Field(..., alias='eventStage')
-    content_id: str | None = Field(None, alias='contentId')
     availability: Availability1
     start_of_credits: int = Field(..., alias='startOfCredits')
-    markers: Markers | None = None
+    content_id: str | None = Field(None, alias='contentId')
+    markers: Markers1 | None = None
 
 class Formats1(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -348,6 +374,17 @@ class MediaType(BaseModel):
     count: int
     latest: int
 
+class Term1(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    description: str
+    abbreviation: str | None = None
+
+class AdvisoryItem1(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    terms: list[Term1]
+    id: str
+    group: int
+
 class FanCriticRatingItem1(BaseModel):
     model_config = ConfigDict(defer_build=True)
     source: str
@@ -358,70 +395,70 @@ class FanCriticRatingItem1(BaseModel):
 class Attributes1(BaseModel):
     model_config = ConfigDict(defer_build=True)
     free_wheel_content_id: str = Field(..., alias='FreeWheelContentID')
-    advisory: list[AdvisoryItem] | None = None
-    audience_level: list[AudienceLevelItem] | None = Field(None, alias='audienceLevel')
     audio_described: bool = Field(..., alias='audioDescribed')
+    available_episode_count: int | None = Field(None, alias='availableEpisodeCount')
+    available_season_count: int | None = Field(None, alias='availableSeasonCount')
     badging: Badging1
-    cast: list[str] | None = None
-    channel: Channel
+    brands: list[str] | None = None
+    channel: Channel1
     chapters_enabled: bool = Field(..., alias='chaptersEnabled')
     child_node_types: list[str] = Field(..., alias='childNodeTypes')
     classification: list[str]
-    closed_captioned: bool | None = Field(None, alias='closedCaptioned')
     content_segments: list[str] = Field(..., alias='contentSegments')
     created_date: int = Field(..., alias='createdDate')
     desc_long_seo: str = Field(..., alias='descLongSeo')
     device_availabilities: list[DeviceAvailability2] = Field(..., alias='deviceAvailabilities')
     device_availability: DeviceAvailability3 = Field(..., alias='deviceAvailability')
-    director: list[str] | None = None
-    duration_milliseconds: int | None = Field(None, alias='durationMilliseconds')
-    duration_minutes: int | None = Field(None, alias='durationMinutes')
-    duration_seconds: int | None = Field(None, alias='durationSeconds')
-    editorial_warning_text: str | None = Field(None, alias='editorialWarningText')
     formats: Formats1
-    genre_details: list[GenreDetail] | None = Field(None, alias='genreDetails')
     genre_list: list[GenreListItem] = Field(..., alias='genreList')
     genres: list[str]
     gracenote_id: str = Field(..., alias='gracenoteId')
+    gracenote_series_id: str | None = Field(None, alias='gracenoteSeriesId')
     images: list[Image]
-    main_original_language: str | None = Field(None, alias='mainOriginalLanguage')
-    merlin_alternate_id: str | None = Field(None, alias='merlinAlternateId')
+    media_types: list[MediaType] | None = Field(None, alias='mediaTypes')
     merlin_id: str = Field(..., alias='merlinId')
-    native_id: str | None = Field(None, alias='nativeId')
+    merlin_series_id: str | None = Field(None, alias='merlinSeriesId')
     nbcu_id: str = Field(..., alias='nbcuId')
+    nbcu_series_id: str | None = Field(None, alias='nbcuSeriesId')
     ott_certificate: str = Field(..., alias='ottCertificate')
-    producer: list[str] | None = None
+    provider_series_id: str | None = Field(None, alias='providerSeriesId')
+    reverse_order: bool | None = Field(None, alias='reverseOrder')
+    section_navigation: str = Field(..., alias='sectionNavigation')
+    series_native_id: str | None = Field(None, alias='seriesNativeId')
+    series_uuid: UUID | None = Field(None, alias='seriesUuid')
+    slug: str
+    smart_call_to_action: str | None = Field(None, alias='smartCallToAction')
+    sort_title: str = Field(..., alias='sortTitle')
+    synopsis_long: str = Field(..., alias='synopsisLong')
+    synopsis_short: str | None = Field(None, alias='synopsisShort')
+    target_audience: TargetAudience = Field(..., alias='targetAudience')
+    title: str
+    title_medium: str = Field(..., alias='titleMedium')
+    title_seo: str = Field(..., alias='titleSeo')
+    audience_level: list[AudienceLevelItem] | None = Field(None, alias='audienceLevel')
+    cast: list[str] | None = None
+    genre_details: list[GenreDetail] | None = Field(None, alias='genreDetails')
+    closed_captioned: bool | None = Field(None, alias='closedCaptioned')
+    duration_milliseconds: int | None = Field(None, alias='durationMilliseconds')
+    duration_minutes: int | None = Field(None, alias='durationMinutes')
+    duration_seconds: int | None = Field(None, alias='durationSeconds')
+    main_original_language: str | None = Field(None, alias='mainOriginalLanguage')
+    native_id: str | None = Field(None, alias='nativeId')
     production_language: str | None = Field(None, alias='productionLanguage')
     programme_uuid: UUID | None = Field(None, alias='programmeUuid')
     provider_id: str | None = Field(None, alias='providerId')
     provider_variant_id: UUID | None = Field(None, alias='providerVariantId')
     runtime: time | None = None
-    section_navigation: str = Field(..., alias='sectionNavigation')
-    slug: str
-    sort_title: str = Field(..., alias='sortTitle')
     subtitled: bool | None = None
     synopsis: str | None = None
     synopsis_brief: str | None = Field(None, alias='synopsisBrief')
-    synopsis_long: str = Field(..., alias='synopsisLong')
-    synopsis_short: str = Field(..., alias='synopsisShort')
-    target_audience: TargetAudience = Field(..., alias='targetAudience')
-    title: str
     title_long: str | None = Field(None, alias='titleLong')
-    title_medium: str = Field(..., alias='titleMedium')
-    title_seo: str = Field(..., alias='titleSeo')
     year: int | None = None
-    available_episode_count: int | None = Field(None, alias='availableEpisodeCount')
-    available_season_count: int | None = Field(None, alias='availableSeasonCount')
-    brands: list[str] | None = None
-    gracenote_series_id: str | None = Field(None, alias='gracenoteSeriesId')
-    media_types: list[MediaType] | None = Field(None, alias='mediaTypes')
-    merlin_series_id: str | None = Field(None, alias='merlinSeriesId')
-    nbcu_series_id: str | None = Field(None, alias='nbcuSeriesId')
-    provider_series_id: str | None = Field(None, alias='providerSeriesId')
-    reverse_order: bool | None = Field(None, alias='reverseOrder')
-    series_native_id: str | None = Field(None, alias='seriesNativeId')
-    series_uuid: UUID | None = Field(None, alias='seriesUuid')
-    smart_call_to_action: str | None = Field(None, alias='smartCallToAction')
+    advisory: list[AdvisoryItem1] | None = None
+    director: list[str] | None = None
+    editorial_warning_text: str | None = Field(None, alias='editorialWarningText')
+    merlin_alternate_id: str | None = Field(None, alias='merlinAlternateId')
+    producer: list[str] | None = None
     cwm: str | None = None
     alternative_date: list[AlternativeDateItem] | None = Field(None, alias='alternativeDate')
     fan_critic_rating: list[FanCriticRatingItem1] | None = Field(None, alias='fanCriticRating')
@@ -451,6 +488,11 @@ class Badging2(BaseModel):
     model_config = ConfigDict(defer_build=True)
     video_formats: list[VideoFormat] = Field(..., alias='videoFormats')
     audio_tracks: list[str] = Field(..., alias='audioTracks')
+
+class Channel2(BaseModel):
+    model_config = ConfigDict(defer_build=True)
+    access_channel: str | None = Field(None, alias='accessChannel')
+    name: str | None = None
 
 class DeviceAvailability4(BaseModel):
     model_config = ConfigDict(defer_build=True)
@@ -545,7 +587,7 @@ class Attributes2(BaseModel):
     audio_described: bool = Field(..., alias='audioDescribed')
     autoplay: bool
     badging: Badging2
-    channel: Channel
+    channel: Channel2
     chapters_enabled: bool = Field(..., alias='chaptersEnabled')
     child_node_types: list[str] = Field(..., alias='childNodeTypes')
     classification: list[str]
@@ -572,11 +614,11 @@ class Attributes2(BaseModel):
     runtime: time
     slug: str
     synopsis_long: str = Field(..., alias='synopsisLong')
-    synopsis_short: str = Field(..., alias='synopsisShort')
     target_audience: TargetAudience = Field(..., alias='targetAudience')
     title: str
     title_long: str = Field(..., alias='titleLong')
     title_medium: str = Field(..., alias='titleMedium')
+    synopsis_short: str | None = Field(None, alias='synopsisShort')
     alternative_date: list[AlternativeDateItem] | None = Field(None, alias='alternativeDate')
     cwm: str | None = None
     fan_critic_rating: list[FanCriticRatingItem2] | None = Field(None, alias='fanCriticRating')
